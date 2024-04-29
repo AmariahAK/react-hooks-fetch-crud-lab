@@ -27,12 +27,28 @@ function QuestionForm(props) {
       },
       body: JSON.stringify(formData)
     })
-    .then(response => response.json())
-    .then(newQuestion => {
-      // Assuming there's a function passed as prop to handle adding the new question
-      props.onAddQuestion(newQuestion);
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to create question');
+      }
+      return response.json();
     })
-    .catch(error => console.error('Error creating question:', error));
+    .then(newQuestion => {
+      // Call the onAddQuestion function passed as prop to handle adding the new question
+      props.onAddQuestion(newQuestion);
+      // Reset the form after successful submission
+      setFormData({
+        prompt: "",
+        answer1: "",
+        answer2: "",
+        answer3: "",
+        answer4: "",
+        correctIndex: 0,
+      });
+    })
+    .catch(error => {
+      console.error('Error creating question:', error);
+    });
   }
 
   return (

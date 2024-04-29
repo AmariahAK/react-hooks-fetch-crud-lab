@@ -10,13 +10,38 @@ function QuestionItem({ question, onDeleteQuestion, onUpdateCorrectAnswer }) {
   ));
 
   const handleDelete = () => {
-    // Call the onDeleteQuestion function passed as a prop
-    onDeleteQuestion(id);
+    fetch(`http://localhost:4000/questions/${id}`, {
+      method: 'DELETE',
+    })
+    .then(response => {
+      if (response.ok) {
+        onDeleteQuestion(id);
+      } else {
+        console.error('Failed to delete question:', response.status);
+      }
+    })
+    .catch(error => console.error('Error deleting question:', error));
   };
 
   const handleCorrectAnswerChange = (event) => {
-    // Call the onUpdateCorrectAnswer function passed as a prop
-    onUpdateCorrectAnswer(id, parseInt(event.target.value));
+    const newCorrectIndex = parseInt(event.target.value);
+    fetch(`http://localhost:4000/questions/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        correctIndex: newCorrectIndex
+      })
+    })
+    .then(response => {
+      if (response.ok) {
+        onUpdateCorrectAnswer(id, newCorrectIndex);
+      } else {
+        console.error('Failed to update correct answer:', response.status);
+      }
+    })
+    .catch(error => console.error('Error updating correct answer:', error));
   };
 
   return (
