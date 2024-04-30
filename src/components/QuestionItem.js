@@ -1,6 +1,10 @@
 import React from "react";
 
 function QuestionItem({ question, onDeleteQuestion, onUpdateCorrectAnswer }) {
+  if (!question) {
+    return null; // Return null if question is null or undefined
+  }
+
   const { id, prompt, answers, correctIndex } = question;
 
   const options = answers.map((answer, index) => (

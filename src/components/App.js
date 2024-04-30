@@ -10,11 +10,15 @@ function App() {
     setPage("Form");
   };
 
+  const handlePageChange = (pageName) => {
+    setPage(pageName);
+  };
+
   return (
     <main>
-      <AdminNavBar onChangePage={setPage} onAddQuestion={handleAddQuestion} />
+      <AdminNavBar onChangePage={handlePageChange} onAddQuestion={handleAddQuestion} />
       {page === "Form" ? (
-        <QuestionForm onAddQuestion={() => setPage("List")} />
+        <QuestionForm onAddQuestion={() => handlePageChange("List")} />
       ) : (
         <QuestionList />
       )}
